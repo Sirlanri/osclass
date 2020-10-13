@@ -10,25 +10,35 @@ void consumer(){
     if (number<=0)
     {
         pthread_mutex_lock(&mutex);
+        number--;
+        usleep(100);
+        pthread_mutex_unlock(&mutex);
+        printf("consumer Do %d\n",number);
+    }else
+    {
+        number--;
+        usleep(100);
+        //pthread_mutex_unlock(&mutex);
+        printf("consumer Do %d\n",number);
     }
     
-    number--;
-    usleep(100);
-    //pthread_mutex_unlock(&mutex);
-    printf("consumer Do %d\n",number);
+    
+    
     
  
 }
 
 void producter(){
     pthread_mutex_unlock(&mutex);
+    pthread_mutex_lock(&mutex);
     number++;
     usleep(100);
+    pthread_mutex_unlock(&mutex);
     printf("producter Do %d\n",number);
 }
 
 void *rangeCon(void *arg){
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 40; i++)
     {
         consumer();
     }
@@ -36,8 +46,9 @@ void *rangeCon(void *arg){
 }
 
 void *rangePro(void *arg){
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 40; i++)
     {
+        pthread_mutex_lock(&mutex);
         producter();
     }
     
