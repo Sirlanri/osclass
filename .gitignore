@@ -1,3 +1,5 @@
 *.cout
 *.out
+*.exe
+.idea
 .vscode/
