@@ -13,7 +13,7 @@ void count1() {
 	//加锁
 	mutex1.lock();
 	index += 1;
-	cout << "当前：" <<index<< endl;
+	cout <<index<< endl;
 	mutex1.unlock();
 }
 
@@ -25,6 +25,12 @@ void count2() {
 	index += 1;
 }
 
+/*不加锁测试*/
+void countNo() {
+	index += 1;
+	cout << index << endl;
+}
+
 void test1() {
 	index = 0;
 
@@ -33,8 +39,9 @@ void test1() {
 int main() {
 	//创建一组线程
 	vector<thread> v;
-	v.reserve(4);
-	for (int i = 0; i < 4; i++)
+	v.reserve(20);
+	cout << "有锁" << endl;
+	for (int i = 0; i < 20; i++)
 	{
 		v.emplace_back(&count1);
 	}
@@ -44,4 +51,17 @@ int main() {
 		t.join();
 	}
 
+
+	//这组线程没有锁
+	vector <thread> v2;
+	v.reserve(20);
+	cout << "没有锁" << endl;
+	for (int i = 0; i < 20; i++)
+	{
+		v2.emplace_back(&countNo);
+	}
+	for (thread& t : v2)
+	{
+		t.join();
+	}
 }
